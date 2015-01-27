@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.buttonWrite = new System.Windows.Forms.Button();
@@ -36,6 +37,9 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.buttonAddWriteList = new System.Windows.Forms.Button();
             this.buttonClearWriteList = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.buttonReadWrite = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -111,11 +115,37 @@
             this.buttonClearWriteList.UseVisualStyleBackColor = true;
             this.buttonClearWriteList.Click += new System.EventHandler(this.button5_Click);
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            // 
+            // buttonReadWrite
+            // 
+            this.buttonReadWrite.Location = new System.Drawing.Point(196, 160);
+            this.buttonReadWrite.Name = "buttonReadWrite";
+            this.buttonReadWrite.Size = new System.Drawing.Size(86, 23);
+            this.buttonReadWrite.TabIndex = 8;
+            this.buttonReadWrite.Text = "Read/Write";
+            this.buttonReadWrite.UseVisualStyleBackColor = true;
+            this.buttonReadWrite.Click += new System.EventHandler(this.buttonReadWrite_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(12, 160);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(86, 23);
+            this.button2.TabIndex = 9;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(386, 195);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.buttonReadWrite);
             this.Controls.Add(this.buttonClearWriteList);
             this.Controls.Add(this.buttonAddWriteList);
             this.Controls.Add(this.textBox1);
@@ -141,6 +171,9 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button buttonAddWriteList;
         private System.Windows.Forms.Button buttonClearWriteList;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button buttonReadWrite;
+        private System.Windows.Forms.Button button2;
 
     }
 }

@@ -17,19 +17,27 @@ namespace ModbusExample
         {
             InitializeComponent();
             ModbusMaster1 = new ModbusSerialMaster("COM9");
-            HandleModbusData traitementDonneesRecues = new HandleModbusData(DisplayModbusData);
-            ModbusMaster1.ModbusDataReceived += delegate(UInt16[] donneesLues) { Invoke(traitementDonneesRecues, donneesLues ); };
+            HandleModbusData DisplayModbusDataDelegate = new HandleModbusData(DisplayModbusData);
+            ModbusMaster1.ModbusDataReceived += delegate(Int16[] donneesLues) { Invoke(DisplayModbusDataDelegate, donneesLues ); };
+
+            HandleModbusError HandleCommErrorDelegate = new HandleModbusError(HandleCommError);
+            ModbusMaster1.ModbusError += delegate(Exception ex) { Invoke(HandleCommErrorDelegate,ex); };
         }
 
         ModbusSerialMaster ModbusMaster1;
-        public UInt16[] readValues;
+        
+        private void HandleCommError(Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+            ModbusMaster1.CommException = null;
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ModbusMaster1.ModbusRequestRead(1, 24, 8);
+            readOutputValues();
         }
 
-        void DisplayModbusData(UInt16[] values)
+        private void DisplayModbusData(Int16[] values)
         {
             foreach (object value in values)
                 listBox1.Items.Add(value.ToString());
@@ -37,14 +45,7 @@ namespace ModbusExample
 
         private void button2_Click(object sender, EventArgs e)
         {
-            int NbItemsToSend = Math.Min(8,listBox2.Items.Count);
-            Int16[] testValues = new Int16[NbItemsToSend];
-            int idx = 0;
-            for (idx = 0; idx < NbItemsToSend;idx++ )
-                {
-                    testValues[idx] = unchecked((Int16)(UInt16)listBox2.Items[idx]);
-                }
-            ModbusMaster1.ModbusRequestWrite(1,16,testValues);
+            writeInputValues();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -61,9 +62,52 @@ namespace ModbusExample
 
         private void button4_Click(object sender, EventArgs e)
         {
-            UInt16 value;
-            if (UInt16.TryParse(textBox1.Text, out value))
+            Int16 value;
+            if (Int16.TryParse(textBox1.Text, out value))
                 listBox2.Items.Add(value);
+        }
+
+        private void buttonReadWrite_Click(object sender, EventArgs e)
+        {
+            button2_Click(sender, e);
+            button1_Click(sender, e);
+        }
+
+        private void readOutputValues()
+        {
+            try
+            {
+                ModbusMaster1.ModbusRequestRead(1, 24, 8);
+            }
+            catch (Exception ex)
+            { MessageBox.Show(ex.Message); }
+        }
+
+        private void writeInputValues()
+        {
+            int NbItemsToSend = Math.Min(8, listBox2.Items.Count);
+            if (NbItemsToSend > 0)
+            {
+                Int16[] testValues = new Int16[NbItemsToSend];
+                int idx = 0;
+                for (idx = 0; idx < NbItemsToSend; idx++)
+                {
+                    Int16 temp = (Int16)listBox2.Items[idx];
+                    testValues[idx] = unchecked((Int16)temp);
+                }
+                try
+                {
+                    ModbusMaster1.ModbusRequestWrite(1, 16, testValues);
+                 }
+            catch (Exception ex)
+            { MessageBox.Show(ex.Message); }
+            }
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            short[] testValues = {1,2,3,4};
+            ModbusMaster1.ModbusRequestWrite(1,24,testValues);
         }
 
         
